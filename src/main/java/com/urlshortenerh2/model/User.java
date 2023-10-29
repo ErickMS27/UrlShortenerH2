@@ -4,11 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import lombok.Getter;
+import lombok.EqualsAndHashCode;
 
-@Entity
+
+@Getter
+@Entity(name = "User")
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 
 public class User {
     @Id
@@ -23,5 +28,9 @@ public class User {
 
     @Column(name = "password")
     private String password;
+
+    public User(){
+
+    }
 
 }
