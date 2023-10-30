@@ -1,20 +1,39 @@
 package com.urlshortenerh2.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 @Entity
+@Getter
+@Setter
+@Table(name = "url_shortener", schema = "urlshortener")
 public class UrlShortener {
     @Id
     @GeneratedValue
+    @Column(name = "id", nullable = false)
     private long id;
+
     @Lob
+    @NotNull(message = "{field.notnull}")
+    @NotEmpty(message = "{field.notempty}")
     private String originalUrl;
+
+    @NotNull(message = "{field.notnull}")
+    @NotEmpty(message = "{field.notempty}")
     private String shortLink;
+
+    @NotNull(message = "{field.notnull}")
+    @NotEmpty(message = "{field.notempty}")
     private LocalDateTime creationDate;
+
+    @NotNull(message = "{field.notnull}")
+    @NotEmpty(message = "{field.notempty}")
     private LocalDateTime expirationDate;
 
     public UrlShortener(long id, String originalUrl, String shortLink, LocalDateTime creationDate, LocalDateTime expirationDate) {
