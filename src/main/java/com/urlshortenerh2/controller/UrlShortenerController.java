@@ -67,7 +67,7 @@ public class UrlShortenerController
     }
 
     @PostMapping
-    public void register(@RequestBody String json){
-        System.out.println(json);
+    public void register(@RequestBody String originalUrl){
+        System.out.println(originalUrl);
     }
 }
