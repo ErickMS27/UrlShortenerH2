@@ -16,8 +16,11 @@
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files />
   </component>
+  <component name="DBNavigator.Project.ExecutionManager">
+    <retain-sticky-names value="false" />
+  </component>
   <component name="DBNavigator.Project.FileConnectionMappingManager">
-    <mapping file-url="file://$PROJECT_DIR$/src/main/resources/db/migrations/V2_CREATE_PROCEDURE_CloseSession()_urlmapping.sql" connection-id="e1035a28-09e3-45be-8dce-7a12b2911a03" session-id="MAIN" current-schema="mysql" />
+    <mapping file-url="file://$PROJECT_DIR$/src/main/resources/db/migrations/V2_CREATE_PROCEDURE_CalculateTime()_urlmapping.sql" connection-id="e1035a28-09e3-45be-8dce-7a12b2911a03" session-id="MAIN" current-schema="mysql" />
   </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />

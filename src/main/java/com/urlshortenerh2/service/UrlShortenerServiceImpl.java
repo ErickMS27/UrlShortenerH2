@@ -26,7 +26,7 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
         if (StringUtils.isNotEmpty(urlShortenerDTO.getUrl())) {
             String encodedUrl = encodeUrl(urlShortenerDTO.getUrl());
             UrlShortener urlToPersist = new UrlShortener();
-            urlToPersist.setCreationTime(LocalDateTime.now());
+            urlToPersist.setCreatedTime(LocalDateTime.now());
             urlToPersist.setOriginalUrl(urlShortenerDTO.getUrl());
             urlToPersist.setShortLink(encodedUrl);
             UrlShortener urlToRet = persistShortLink(urlToPersist);
