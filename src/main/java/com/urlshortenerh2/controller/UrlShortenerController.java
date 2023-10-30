@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 @RestController
 public class UrlShortenerController
@@ -66,8 +65,8 @@ public class UrlShortenerController
         return null;
     }
 
-    @PostMapping
-    public void register(@RequestBody String originalUrl){
-        System.out.println(originalUrl);
+   @PostMapping
+   public void register(@RequestBody CalculateEstimatedTime calculateEstimatedTime){
+       System.out.println(calculateEstimatedTime);
     }
 }

@@ -36,13 +36,13 @@ public class UrlShortener {
     @NotEmpty(message = "{field.notempty}")
     private LocalDateTime createdTime;
 
-    public UrlShortener(long id, String originalUrl, String shortLink, LocalDateTime estimatedTime, LocalDateTime createdTime) {
-        this.id = id;
-        this.originalUrl = originalUrl;
-        this.shortLink = shortLink;
-        this.estimatedTime = estimatedTime;
-        this.createdTime = createdTime;
-    }
+//    public UrlShortener(long id, String originalUrl, String shortLink, LocalDateTime estimatedTime, LocalDateTime createdTime) {
+//        this.id = id;
+//        this.originalUrl = originalUrl;
+//        this.shortLink = shortLink;
+//        this.estimatedTime = estimatedTime;
+//        this.createdTime = createdTime;
+//    }
 
     public UrlShortener() {
     }
@@ -57,4 +57,5 @@ public class UrlShortener {
                 ", createdTime=" + createdTime +
                 '}';
     }
+
 }
