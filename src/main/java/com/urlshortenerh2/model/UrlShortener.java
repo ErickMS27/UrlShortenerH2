@@ -30,13 +30,17 @@ public class UrlShortener {
 
     @NotNull(message = "{field.notnull}")
     @NotEmpty(message = "{field.notempty}")
-    private LocalDateTime creationTime;
+    private LocalDateTime estimatedTime;
 
-    public UrlShortener(long id, String originalUrl, String shortLink, LocalDateTime creationTime) {
+    @NotNull(message = "{field.notnull}")
+    @NotEmpty(message = "{field.notempty}")
+    private LocalDateTime createdTime;
+
+    public UrlShortener(long id, String originalUrl, String shortLink, LocalDateTime estimatedTime) {
         this.id = id;
         this.originalUrl = originalUrl;
         this.shortLink = shortLink;
-        this.creationTime = creationTime;
+        this.estimatedTime = estimatedTime;
     }
 
     public UrlShortener() {
@@ -48,7 +52,7 @@ public class UrlShortener {
                 "id=" + id +
                 ", originalUrl='" + originalUrl + '\'' +
                 ", shortLink='" + shortLink + '\'' +
-                ", creationTime=" + creationTime +
+                ", creationTime=" + estimatedTime +
                 '}';
     }
 }
