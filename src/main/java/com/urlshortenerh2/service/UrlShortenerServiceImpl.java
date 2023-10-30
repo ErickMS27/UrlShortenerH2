@@ -26,10 +26,9 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
         if (StringUtils.isNotEmpty(urlShortenerDTO.getUrl())) {
             String encodedUrl = encodeUrl(urlShortenerDTO.getUrl());
             UrlShortener urlToPersist = new UrlShortener();
-            urlToPersist.setCreationDate(LocalDateTime.now());
+            urlToPersist.setCreatedTime(LocalDateTime.now());
             urlToPersist.setOriginalUrl(urlShortenerDTO.getUrl());
             urlToPersist.setShortLink(encodedUrl);
-            urlToPersist.setExpirationDate(getExpirationDate(urlShortenerDTO.getExpirationDate(), urlToPersist.getCreationDate()));
             UrlShortener urlToRet = persistShortLink(urlToPersist);
 
             if (urlToRet != null)
@@ -38,14 +37,6 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
             return null;
         }
         return null;
-    }
-
-    private LocalDateTime getExpirationDate(String expirationDate, LocalDateTime creationDate) {
-        if (StringUtils.isBlank(expirationDate)) {
-            return creationDate.plusSeconds(60);
-        }
-        LocalDateTime expirationDateToRet = LocalDateTime.parse(expirationDate);
-        return expirationDateToRet;
     }
 
     private String encodeUrl(String url) {

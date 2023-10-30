@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Getter
 @Setter
-@Table(name = "url_shortener", schema = "urlshortener")
+@Table(name = "links", schema = "urlshortener")
 public class UrlShortener {
     @Id
     @GeneratedValue
@@ -30,61 +30,21 @@ public class UrlShortener {
 
     @NotNull(message = "{field.notnull}")
     @NotEmpty(message = "{field.notempty}")
-    private LocalDateTime creationDate;
+    private LocalDateTime estimatedTime;
 
     @NotNull(message = "{field.notnull}")
     @NotEmpty(message = "{field.notempty}")
-    private LocalDateTime expirationDate;
+    private LocalDateTime createdTime;
 
-    public UrlShortener(long id, String originalUrl, String shortLink, LocalDateTime creationDate, LocalDateTime expirationDate) {
+    public UrlShortener(long id, String originalUrl, String shortLink, LocalDateTime estimatedTime, LocalDateTime createdTime) {
         this.id = id;
         this.originalUrl = originalUrl;
         this.shortLink = shortLink;
-        this.creationDate = creationDate;
-        this.expirationDate = expirationDate;
+        this.estimatedTime = estimatedTime;
+        this.createdTime = createdTime;
     }
 
     public UrlShortener() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getOriginalUrl() {
-        return originalUrl;
-    }
-
-    public void setOriginalUrl(String originalUrl) {
-        this.originalUrl = originalUrl;
-    }
-
-    public String getShortLink() {
-        return shortLink;
-    }
-
-    public void setShortLink(String shortLink) {
-        this.shortLink = shortLink;
-    }
-
-    public LocalDateTime getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public LocalDateTime getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(LocalDateTime expirationDate) {
-        this.expirationDate = expirationDate;
     }
 
     @Override
@@ -93,8 +53,8 @@ public class UrlShortener {
                 "id=" + id +
                 ", originalUrl='" + originalUrl + '\'' +
                 ", shortLink='" + shortLink + '\'' +
-                ", creationDate=" + creationDate +
-                ", expirationDate=" + expirationDate +
+                ", estimatedTime=" + estimatedTime +
+                ", createdTime=" + createdTime +
                 '}';
     }
 }
