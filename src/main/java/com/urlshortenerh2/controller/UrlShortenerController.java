@@ -5,6 +5,7 @@ import com.urlshortenerh2.dto.UrlShortenerDTO;
 import com.urlshortenerh2.dto.UrlErrorResponseDTO;
 import com.urlshortenerh2.dto.UrlResponseDTO;
 import com.urlshortenerh2.service.UrlShortenerService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,9 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 @RestController
+@RequestMapping("/api/urlshortener")
+@SecurityRequirement(name = "bearer-key")
 public class UrlShortenerController
 {
     @Autowired
@@ -31,14 +33,13 @@ public class UrlShortenerController
         {
             UrlResponseDTO urlResponseDTO = new UrlResponseDTO();
             urlResponseDTO.setOriginalUrl(urlToRet.getOriginalUrl());
-            urlResponseDTO.setExpirationDate(urlToRet.getExpirationDate());
             urlResponseDTO.setShortLink(urlToRet.getShortLink());
             return new ResponseEntity<UrlResponseDTO>(urlResponseDTO, HttpStatus.OK);
         }
 
         UrlErrorResponseDTO urlErrorResponseDTO= new UrlErrorResponseDTO();
         urlErrorResponseDTO.setStatus("404");
-        urlErrorResponseDTO.setError("There was an error processing your request. please try again.");
+        urlErrorResponseDTO.setError("{ERR_CODE: 002, Description:SHORTENED URL NOT FOUND}");
         return new ResponseEntity<UrlErrorResponseDTO>(urlErrorResponseDTO,HttpStatus.OK);
 
     }
@@ -63,16 +64,12 @@ public class UrlShortenerController
             return new ResponseEntity<UrlErrorResponseDTO>(urlErrorResponseDTO,HttpStatus.OK);
         }
 
-        if(urlToRet.getExpirationDate().isBefore(LocalDateTime.now()))
-        {
-            urlShortenerService.deleteShortLink(urlToRet);
-            UrlErrorResponseDTO urlErrorResponseDto = new UrlErrorResponseDTO();
-            urlErrorResponseDto.setError("Url Expired. Please try generating a fresh one.");
-            urlErrorResponseDto.setStatus("200");
-            return new ResponseEntity<UrlErrorResponseDTO>(urlErrorResponseDto,HttpStatus.OK);
-        }
-
         response.sendRedirect(urlToRet.getOriginalUrl());
         return null;
+    }
+
+    @PostMapping
+    public void register(@RequestBody CalculateEstimatedTime calculateEstimatedTime){
+        System.out.println(calculateEstimatedTime);
     }
 }
