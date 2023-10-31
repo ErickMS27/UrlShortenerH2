@@ -20,18 +20,22 @@ public class UrlShortener {
     private long id;
 
     @Lob
+    @Column(name = "originalUrl")
     @NotNull(message = "{field.notnull}")
     @NotEmpty(message = "{field.notempty}")
     private String originalUrl;
 
+    @Column(name = "shortLink")
     @NotNull(message = "{field.notnull}")
     @NotEmpty(message = "{field.notempty}")
     private String shortLink;
 
+    @Column(name = "estimatedTime")
     @NotNull(message = "{field.notnull}")
     @NotEmpty(message = "{field.notempty}")
     private LocalDateTime estimatedTime;
 
+    @Column(name = "createdTime")
     @NotNull(message = "{field.notnull}")
     @NotEmpty(message = "{field.notempty}")
     private LocalDateTime createdTime;
