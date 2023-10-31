@@ -57,7 +57,7 @@ public class UrlShortener {
                 "  id=" + id +
                 ", longLink='" + longLink + '\'' +
                 ", shortLink='" + shortLink + '\'' +
-                ", estimatedTime=" + estimatedTime +
+//                ", estimatedTime=" + estimatedTime +
                 ", createdTime=" + createdTime +
                 '}';
     }

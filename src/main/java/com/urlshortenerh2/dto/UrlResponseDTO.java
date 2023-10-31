@@ -5,12 +5,12 @@ import java.time.LocalDateTime;
 public class UrlResponseDTO {
     private String longLink;
     private String shortLink;
-    private LocalDateTime expirationDate;
+    private LocalDateTime estimatedTime;
 
     public UrlResponseDTO(String longLink, String shortLink, LocalDateTime expirationDate) {
         this.longLink = longLink;
         this.shortLink = shortLink;
-        this.expirationDate = expirationDate;
+        this.estimatedTime = estimatedTime;
     }
 
     public UrlResponseDTO() {
@@ -32,12 +32,12 @@ public class UrlResponseDTO {
         this.shortLink = shortLink;
     }
 
-    public LocalDateTime getExpirationDate() {
-        return expirationDate;
+    public LocalDateTime getEstimatedTime() {
+        return estimatedTime;
     }
 
-    public void setExpirationDate(LocalDateTime expirationDate) {
-        this.expirationDate = expirationDate;
+    public void setEstimatedTime(LocalDateTime estimatedTime) {
+        this.estimatedTime = estimatedTime;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class UrlResponseDTO {
         return "UrlResponseDto{" +
                 "longLink='" + longLink + '\'' +
                 ", shortLink='" + shortLink + '\'' +
-                ", expirationDate=" + expirationDate +
+                ", estimatedTime=" + estimatedTime +
                 '}';
     }
 }

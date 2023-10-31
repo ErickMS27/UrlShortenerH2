@@ -42,7 +42,8 @@ public class UrlShortenerController
     }
 
     @GetMapping("/{shortLink}")
-    public ResponseEntity<?> redirectTolongLink(@PathVariable String shortLink, HttpServletResponse response) throws IOException {
+    public ResponseEntity<?> redirectTolongLink(@PathVariable String shortLink, HttpServletResponse response)
+            throws IOException {
 
         if(StringUtils.isEmpty(shortLink))
         {
@@ -61,8 +62,12 @@ public class UrlShortenerController
             return new ResponseEntity<UrlErrorResponseDTO>(urlErrorResponseDTO,HttpStatus.OK);
         }
 
-        response.sendRedirect(urlToRet.getLongLink());
-        return null;
+        UrlResponseDTO urlResponseDTO = new UrlResponseDTO();
+        urlResponseDTO.setLongLink(urlToRet.getLongLink());
+        urlResponseDTO.setShortLink(urlToRet.getShortLink());
+        urlResponseDTO.setEstimatedTime(urlToRet.getEstimatedTime());
+
+        return new ResponseEntity<>(urlResponseDTO, HttpStatus.OK);
     }
 
 //    @PostMapping
