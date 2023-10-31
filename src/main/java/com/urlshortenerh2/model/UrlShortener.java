@@ -20,10 +20,10 @@ public class UrlShortener {
     private long id;
 
     @Lob
-    @Column(name = "originalUrl")
+    @Column(name = "longLink")
     @NotNull(message = "{field.notnull}")
     @NotEmpty(message = "{field.notempty}")
-    private String originalUrl;
+    private String longLink;
 
     @Column(name = "shortLink")
     @NotNull(message = "{field.notnull}")
@@ -40,9 +40,9 @@ public class UrlShortener {
     @NotEmpty(message = "{field.notempty}")
     private LocalDateTime createdTime;
 
-//    public UrlShortener(long id, String originalUrl, String shortLink, LocalDateTime estimatedTime, LocalDateTime createdTime) {
+//    public UrlShortener(long id, String LongLink, String shortLink, LocalDateTime estimatedTime, LocalDateTime createdTime) {
 //        this.id = id;
-//        this.originalUrl = originalUrl;
+//        this.LongLink = LongLink;
 //        this.shortLink = shortLink;
 //        this.estimatedTime = estimatedTime;
 //        this.createdTime = createdTime;
@@ -54,8 +54,8 @@ public class UrlShortener {
     @Override
     public String toString() {
         return "Url{" +
-                "id=" + id +
-                ", originalUrl='" + originalUrl + '\'' +
+                "  id=" + id +
+                ", longLink='" + longLink + '\'' +
                 ", shortLink='" + shortLink + '\'' +
                 ", estimatedTime=" + estimatedTime +
                 ", createdTime=" + createdTime +

@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
@@ -21,31 +23,33 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
     private UrlShortenerRepository urlShortenerRepository;
 
     @Override
-    public UrlShortener generateShortLink(UrlShortenerDTO urlShortenerDTO) {
+    public @NotNull @NotEmpty String generateShortLink(String longLink, UrlShortenerDTO urlShortenerDTO) {
+        UrlShortener urlToRet = urlShortenerRepository.findByLongLink(longLink);
 
-        if (StringUtils.isNotEmpty(urlShortenerDTO.getUrl())) {
+        if (urlToRet != null) {
+            return urlToRet.getShortLink();
+        } else {
             String encodedUrl = encodeUrl(urlShortenerDTO.getUrl());
             UrlShortener urlToPersist = new UrlShortener();
             urlToPersist.setCreatedTime(LocalDateTime.now());
-            urlToPersist.setOriginalUrl(urlShortenerDTO.getUrl());
+            urlToPersist.setLongLink(urlShortenerDTO.getUrl());
             urlToPersist.setShortLink(encodedUrl);
-            UrlShortener urlToRet = persistShortLink(urlToPersist);
-
-            if (urlToRet != null)
-                return urlToRet;
-
-            return null;
+            urlShortenerRepository.save(urlToPersist);
+            return encodedUrl;
         }
-        return null;
     }
 
-    private String encodeUrl(String url) {
-        String encodedUrl = "";
-        LocalDateTime time = LocalDateTime.now();
-        encodedUrl = Hashing.murmur3_32()
-                .hashString(url.concat(time.toString()), StandardCharsets.UTF_8)
-                .toString();
-        return encodedUrl;
+    public String encodeUrl(String url) {
+        if (url != null) {
+            String encodedUrl = "";
+            LocalDateTime time = LocalDateTime.now();
+            encodedUrl = Hashing.murmur3_32()
+                    .hashString(url.concat(time.toString()), StandardCharsets.UTF_8)
+                    .toString();
+            return encodedUrl;
+        } else {
+            return null;
+        }
     }
 
     @Override

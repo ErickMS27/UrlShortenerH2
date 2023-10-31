@@ -13,39 +13,36 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/urlshortener")
+@RequestMapping("/api")
 @SecurityRequirement(name = "bearer-key")
 public class UrlShortenerController
 {
     @Autowired
     private UrlShortenerService urlShortenerService;
 
-    @PostMapping("/generate")
+    @PostMapping
+    @NotNull(message = "{field.notnull}")
+    @NotEmpty(message = "{field.notempty}")
     public ResponseEntity<?> generateShortLink(@RequestBody UrlShortenerDTO urlShortenerDTO)
     {
-        UrlShortener urlToRet = urlShortenerService.generateShortLink(urlShortenerDTO);
+        String longLink = urlShortenerDTO.getUrl();
 
-        if(urlToRet != null)
-        {
-            UrlResponseDTO urlResponseDTO = new UrlResponseDTO();
-            urlResponseDTO.setOriginalUrl(urlToRet.getOriginalUrl());
-            urlResponseDTO.setShortLink(urlToRet.getShortLink());
-            return new ResponseEntity<UrlResponseDTO>(urlResponseDTO, HttpStatus.OK);
-        }
+        String shortLink = urlShortenerService.generateShortLink(longLink, urlShortenerDTO);
 
-        UrlErrorResponseDTO urlErrorResponseDTO= new UrlErrorResponseDTO();
-        urlErrorResponseDTO.setStatus("404");
-        urlErrorResponseDTO.setError("{ERR_CODE: 002, Description:SHORTENED URL NOT FOUND}");
-        return new ResponseEntity<UrlErrorResponseDTO>(urlErrorResponseDTO,HttpStatus.OK);
-
+        UrlResponseDTO urlResponseDTO = new UrlResponseDTO();
+        urlResponseDTO.setLongLink(longLink);
+        urlResponseDTO.setShortLink(shortLink);
+        return new ResponseEntity<UrlResponseDTO>(urlResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping("/{shortLink}")
-    public ResponseEntity<?> redirectToOriginalUrl(@PathVariable String shortLink, HttpServletResponse response) throws IOException {
+    public ResponseEntity<?> redirectTolongLink(@PathVariable String shortLink, HttpServletResponse response) throws IOException {
 
         if(StringUtils.isEmpty(shortLink))
         {
@@ -64,12 +61,12 @@ public class UrlShortenerController
             return new ResponseEntity<UrlErrorResponseDTO>(urlErrorResponseDTO,HttpStatus.OK);
         }
 
-        response.sendRedirect(urlToRet.getOriginalUrl());
+        response.sendRedirect(urlToRet.getLongLink());
         return null;
     }
 
-    @PostMapping
-    public void register(@RequestBody CalculateEstimatedTime calculateEstimatedTime){
-        System.out.println(calculateEstimatedTime);
-    }
+//    @PostMapping
+//    public void register(@RequestBody CalculateEstimatedTime calculateEstimatedTime){
+//        System.out.println(calculateEstimatedTime);
+//    }
 }

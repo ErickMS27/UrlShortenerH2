@@ -3,12 +3,12 @@ package com.urlshortenerh2.dto;
 import java.time.LocalDateTime;
 
 public class UrlResponseDTO {
-    private String originalUrl;
+    private String longLink;
     private String shortLink;
     private LocalDateTime expirationDate;
 
-    public UrlResponseDTO(String originalUrl, String shortLink, LocalDateTime expirationDate) {
-        this.originalUrl = originalUrl;
+    public UrlResponseDTO(String longLink, String shortLink, LocalDateTime expirationDate) {
+        this.longLink = longLink;
         this.shortLink = shortLink;
         this.expirationDate = expirationDate;
     }
@@ -16,12 +16,12 @@ public class UrlResponseDTO {
     public UrlResponseDTO() {
     }
 
-    public String getOriginalUrl() {
-        return originalUrl;
+    public String getLongLink() {
+        return longLink;
     }
 
-    public void setOriginalUrl(String originalUrl) {
-        this.originalUrl = originalUrl;
+    public void setLongLink(String longLink) {
+        this.longLink = longLink;
     }
 
     public String getShortLink() {
@@ -43,7 +43,7 @@ public class UrlResponseDTO {
     @Override
     public String toString() {
         return "UrlResponseDto{" +
-                "originalUrl='" + originalUrl + '\'' +
+                "longLink='" + longLink + '\'' +
                 ", shortLink='" + shortLink + '\'' +
                 ", expirationDate=" + expirationDate +
                 '}';
