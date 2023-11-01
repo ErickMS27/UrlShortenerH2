@@ -2,9 +2,8 @@ package com.urlshortenerh2.service;
 
 import com.google.common.hash.Hashing;
 import com.urlshortenerh2.model.UrlShortener;
-import com.urlshortenerh2.dto.UrlShortenerDTO;
+import com.urlshortenerh2.dto.UrlShortenerRequestDTO;
 import com.urlshortenerh2.repository.UrlShortenerRepository;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +22,17 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
     private UrlShortenerRepository urlShortenerRepository;
 
     @Override
-    public @NotNull @NotEmpty String generateShortLink(String longLink, UrlShortenerDTO urlShortenerDTO) {
-        UrlShortener urlToRet = urlShortenerRepository.findByLongLink(longLink);
+    public @NotNull @NotEmpty String generateShortLink(UrlShortenerRequestDTO urlShortenerRequestDTO) {
+        UrlShortener urlToRet = urlShortenerRepository.findByLongLink(urlShortenerRequestDTO.getLongLink());
 
         if (urlToRet != null) {
             return urlToRet.getShortLink();
         } else {
-            String encodedUrl = encodeUrl(urlShortenerDTO.getUrl());
+            String encodedUrl = encodeUrl(urlShortenerRequestDTO.getLongLink());
             UrlShortener urlToPersist = new UrlShortener();
-            urlToPersist.setCreatedTime(LocalDateTime.now());
-            urlToPersist.setLongLink(urlShortenerDTO.getUrl());
+            urlToPersist.setLongLink(urlShortenerRequestDTO.getLongLink());
             urlToPersist.setShortLink(encodedUrl);
+            urlToPersist.setCreatedTime(LocalDateTime.now());
             urlShortenerRepository.save(urlToPersist);
             return encodedUrl;
         }

@@ -1,9 +1,9 @@
 package com.urlshortenerh2.controller;
 
 import com.urlshortenerh2.model.UrlShortener;
-import com.urlshortenerh2.dto.UrlShortenerDTO;
+import com.urlshortenerh2.dto.UrlShortenerRequestDTO;
 import com.urlshortenerh2.dto.UrlErrorResponseDTO;
-import com.urlshortenerh2.dto.UrlResponseDTO;
+import com.urlshortenerh2.dto.UrlShortenerResponseDTO;
 import com.urlshortenerh2.service.UrlShortenerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.apache.commons.lang3.StringUtils;
@@ -27,18 +27,15 @@ public class UrlShortenerController
     private UrlShortenerService urlShortenerService;
 
     @PostMapping
-    @NotNull(message = "{field.notnull}")
-    @NotEmpty(message = "{field.notempty}")
-    public ResponseEntity<?> generateShortLink(@RequestBody UrlShortenerDTO urlShortenerDTO)
-    {
-        String longLink = urlShortenerDTO.getUrl();
+    public ResponseEntity<UrlShortenerResponseDTO> generateShortLink(@RequestBody UrlShortenerRequestDTO urlShortenerRequestDTO) {
+        String longLink = urlShortenerRequestDTO.getLongLink();
+        String shortLink = urlShortenerService.generateShortLink(urlShortenerRequestDTO);
 
-        String shortLink = urlShortenerService.generateShortLink(longLink, urlShortenerDTO);
+        UrlShortenerResponseDTO responseDTO = new UrlShortenerResponseDTO();
+        responseDTO.setLongLink(longLink);
+        responseDTO.setShortLink(shortLink);
 
-        UrlResponseDTO urlResponseDTO = new UrlResponseDTO();
-        urlResponseDTO.setLongLink(longLink);
-        urlResponseDTO.setShortLink(shortLink);
-        return new ResponseEntity<UrlResponseDTO>(urlResponseDTO, HttpStatus.OK);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @GetMapping("/{shortLink}")
@@ -62,16 +59,12 @@ public class UrlShortenerController
             return new ResponseEntity<UrlErrorResponseDTO>(urlErrorResponseDTO,HttpStatus.OK);
         }
 
-        UrlResponseDTO urlResponseDTO = new UrlResponseDTO();
-        urlResponseDTO.setLongLink(urlToRet.getLongLink());
-        urlResponseDTO.setShortLink(urlToRet.getShortLink());
-        urlResponseDTO.setEstimatedTime(urlToRet.getEstimatedTime());
+        UrlShortenerResponseDTO urlShortenerResponseDTO = new UrlShortenerResponseDTO();
+        urlShortenerResponseDTO.setLongLink(urlToRet.getLongLink());
+        urlShortenerResponseDTO.setShortLink(shortLink);
 
-        return new ResponseEntity<>(urlResponseDTO, HttpStatus.OK);
+        response.sendRedirect(urlToRet.getLongLink());
+        return new ResponseEntity<>(urlShortenerResponseDTO, HttpStatus.OK);
     }
 
-//    @PostMapping
-//    public void register(@RequestBody CalculateEstimatedTime calculateEstimatedTime){
-//        System.out.println(calculateEstimatedTime);
-//    }
 }

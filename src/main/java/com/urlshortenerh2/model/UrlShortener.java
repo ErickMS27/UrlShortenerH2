@@ -1,7 +1,6 @@
 package com.urlshortenerh2.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,17 +8,21 @@ import java.time.LocalDateTime;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-@Entity
+@Entity (name = "links")
 @Getter
 @Setter
-@Table(name = "links", schema = "urlshortener")
+@Table(name = "links")
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class UrlShortener {
-    @Id
-    @GeneratedValue
-    @Column(name = "id", nullable = false)
-    private long id;
 
-    @Lob
+    @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
     @Column(name = "longLink")
     @NotNull(message = "{field.notnull}")
     @NotEmpty(message = "{field.notempty}")
@@ -40,26 +43,15 @@ public class UrlShortener {
     @NotEmpty(message = "{field.notempty}")
     private LocalDateTime createdTime;
 
-//    public UrlShortener(long id, String LongLink, String shortLink, LocalDateTime estimatedTime, LocalDateTime createdTime) {
-//        this.id = id;
-//        this.LongLink = LongLink;
-//        this.shortLink = shortLink;
-//        this.estimatedTime = estimatedTime;
-//        this.createdTime = createdTime;
-//    }
-
-    public UrlShortener() {
-    }
-
-    @Override
-    public String toString() {
-        return "Url{" +
-                "  id=" + id +
-                ", longLink='" + longLink + '\'' +
-                ", shortLink='" + shortLink + '\'' +
+//    @Override
+//    public String toString() {
+//        return "Url{" +
+//                "  id=" + id +
+//                ", longLink='" + longLink + '\'' +
+//                ", shortLink='" + shortLink + '\'' +
 //                ", estimatedTime=" + estimatedTime +
-                ", createdTime=" + createdTime +
-                '}';
-    }
+//                ", createdTime=" + createdTime +
+//                '}';
+//    }
 
 }

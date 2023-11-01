@@ -5,8 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UrlErrorResponseDTO {
-    private String status;
-    private String error;
+public class UrlShortenerRequestDTO {
+    private String longLink;
 
 }
