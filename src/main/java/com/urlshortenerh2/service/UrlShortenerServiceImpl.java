@@ -65,7 +65,6 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
 
     @Override
     public void deleteShortLink(UrlShortener urlShortener) {
-
         urlShortenerRepository.delete(urlShortener);
     }
 }

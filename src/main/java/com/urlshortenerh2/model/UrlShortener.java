@@ -43,15 +43,4 @@ public class UrlShortener {
     @NotEmpty(message = "{field.notempty}")
     private LocalDateTime createdTime;
 
-//    @Override
-//    public String toString() {
-//        return "Url{" +
-//                "  id=" + id +
-//                ", longLink='" + longLink + '\'' +
-//                ", shortLink='" + shortLink + '\'' +
-//                ", estimatedTime=" + estimatedTime +
-//                ", createdTime=" + createdTime +
-//                '}';
-//    }
-
 }
