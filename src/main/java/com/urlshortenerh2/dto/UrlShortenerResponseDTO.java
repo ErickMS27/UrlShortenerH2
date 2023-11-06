@@ -12,5 +12,4 @@ public class UrlShortenerResponseDTO {
     private String longLink;
     private String shortLink;
     private LocalDateTime estimatedTime = LocalDateTime.now();
-
 }

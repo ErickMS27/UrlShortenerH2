@@ -1,9 +1,9 @@
 package com.urlshortenerh2.controller;
 
-import com.urlshortenerh2.model.UrlShortener;
-import com.urlshortenerh2.dto.UrlShortenerRequestDTO;
 import com.urlshortenerh2.dto.UrlErrorResponseDTO;
+import com.urlshortenerh2.dto.UrlShortenerRequestDTO;
 import com.urlshortenerh2.dto.UrlShortenerResponseDTO;
+import com.urlshortenerh2.model.UrlShortener;
 import com.urlshortenerh2.service.UrlShortenerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.apache.commons.lang3.StringUtils;
@@ -13,8 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -24,8 +24,13 @@ public class UrlShortenerController
     @Autowired
     private UrlShortenerService urlShortenerService;
 
+//    public UrlShortenerController(UrlShortenerService urlShortenerService) {
+//        this.urlShortenerService = urlShortenerService;
+//    }
+
     @PostMapping
     public ResponseEntity<UrlShortenerResponseDTO> generateShortLink(@RequestBody UrlShortenerRequestDTO urlShortenerRequestDTO) {
+
         String longLink = urlShortenerRequestDTO.getLongLink();
         String shortLink = urlShortenerService.generateShortLink(urlShortenerRequestDTO);
 
@@ -35,6 +40,15 @@ public class UrlShortenerController
 
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
+
+//    @GetMapping("/top-10-visited")
+//    public ResponseEntity<List<UrlShortener>>getTop10VisitedLinks(@RequestBody UrlShortenerResponseDTO urlShortenerResponseDTO) {
+//
+//        String top10VisitedLinks = String.valueOf(urlShortenerResponseDTO.getVisitCount());
+//        List<UrlShortener> topVisitedLinks = urlShortenerService.getTop10VisitedLinks(top10VisitedLinks);
+//
+//        return ResponseEntity.ok(topVisitedLinks);
+//    }
 
     @GetMapping("/{shortLink}")
     public ResponseEntity<?> redirectTolongLink(@PathVariable String shortLink, HttpServletResponse response)
