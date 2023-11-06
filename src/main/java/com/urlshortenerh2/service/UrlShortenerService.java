@@ -1,6 +1,5 @@
 package com.urlshortenerh2.service;
 
-import com.urlshortenerh2.model.LinkCounts;
 import com.urlshortenerh2.model.UrlShortener;
 import com.urlshortenerh2.dto.UrlShortenerRequestDTO;
 import org.springframework.stereotype.Service;
@@ -17,5 +16,5 @@ public interface UrlShortenerService {
     public UrlShortener persistShortLink(UrlShortener urlShortener);
     public UrlShortener getEncodedUrl(String urlShortener);
     public void deleteShortLink(UrlShortener urlShortener);
-    public List<LinkCounts> getTop10VisitedLinks(Integer linkCounts);
+    public List<UrlShortener> getTop10VisitedLinks(Integer linkCouts);
 }

@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class LinkCountsDTO {
 
-    private int visitCount;
+    private Integer linkCounts;
 }

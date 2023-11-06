@@ -1,5 +1,6 @@
 package com.urlshortenerh2.controller;
 
+import com.urlshortenerh2.dto.LinkCountsDTO;
 import com.urlshortenerh2.dto.UrlErrorResponseDTO;
 import com.urlshortenerh2.dto.UrlShortenerRequestDTO;
 import com.urlshortenerh2.dto.UrlShortenerResponseDTO;
@@ -41,14 +42,14 @@ public class UrlShortenerController
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
-//    @GetMapping("/top-10-visited")
-//    public ResponseEntity<List<UrlShortener>>getTop10VisitedLinks(@RequestBody UrlShortenerResponseDTO urlShortenerResponseDTO) {
-//
-//        String top10VisitedLinks = String.valueOf(urlShortenerResponseDTO.getVisitCount());
-//        List<UrlShortener> topVisitedLinks = urlShortenerService.getTop10VisitedLinks(top10VisitedLinks);
-//
-//        return ResponseEntity.ok(topVisitedLinks);
-//    }
+    @GetMapping("/top-10-visited")
+    public ResponseEntity<List<UrlShortener>>getTop10VisitedLinks(@RequestBody LinkCountsDTO linkCountsDTO) {
+
+        Integer top10VisitedLinks = linkCountsDTO.getLinkCounts();
+        List<UrlShortener> topVisitedLinks = urlShortenerService.getTop10VisitedLinks(top10VisitedLinks);
+
+        return ResponseEntity.ok(topVisitedLinks);
+    }
 
     @GetMapping("/{shortLink}")
     public ResponseEntity<?> redirectTolongLink(@PathVariable String shortLink, HttpServletResponse response)

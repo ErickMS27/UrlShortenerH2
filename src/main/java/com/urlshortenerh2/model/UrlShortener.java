@@ -43,4 +43,16 @@ public class UrlShortener {
     @NotEmpty(message = "{field.notempty}")
     private LocalDateTime createdTime;
 
+    @Column(name = "visitCount")
+    @NotNull(message = "{field.notnull}")
+    @NotEmpty(message = "{field.notempty}")
+    public int visitCount;
+
+    public int getVisitCount() {
+        return visitCount;
+    }
+
+    public void setVisitCount(int visitCount) {
+        this.visitCount = visitCount;
+    }
 }

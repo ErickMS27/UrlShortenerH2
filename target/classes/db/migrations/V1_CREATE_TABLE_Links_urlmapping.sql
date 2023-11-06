@@ -3,4 +3,5 @@ CREATE TABLE links (
     longLink VARCHAR(999) NOT NULL,
     shortLink VARCHAR(25) NOT NULL,
     createdTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    linkCounts BIGINT(16) NOT NULL;
 );

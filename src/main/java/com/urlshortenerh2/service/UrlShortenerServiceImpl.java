@@ -2,8 +2,6 @@ package com.urlshortenerh2.service;
 
 import com.google.common.hash.Hashing;
 import com.urlshortenerh2.dto.LinkCountsDTO;
-import com.urlshortenerh2.dto.UrlShortenerResponseDTO;
-import com.urlshortenerh2.model.LinkCounts;
 import com.urlshortenerh2.model.UrlShortener;
 import com.urlshortenerh2.dto.UrlShortenerRequestDTO;
 import com.urlshortenerh2.repository.UrlShortenerRepository;
@@ -17,9 +15,7 @@ import javax.validation.constraints.NotNull;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class UrlShortenerServiceImpl implements UrlShortenerService {
@@ -75,16 +71,16 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
     }
 
     @Override
-    public List<LinkCounts> getTop10VisitedLinks(Integer linkCounts) {
-        List<LinkCounts> topVisitedLinks = urlShortenerRepository.findTop10ByOrderByVisitCountDesc(linkCounts);
-        if (topVisitedLinks == null) {
-            topVisitedLinks = new ArrayList<>();
-        }
+    public List<UrlShortener> getTop10VisitedLinks(Integer linkCounts) {
+        List<UrlShortener> topVisitedLinks = urlShortenerRepository.findTop10ByOrderByVisitCountDesc();
+//        if (topVisitedLinks == null) {
+//            topVisitedLinks = new ArrayList<>();
+//        }
 
         List<LinkCountsDTO> topVisitedLinksDTOs = new ArrayList<>();
-        for (LinkCounts linksShortenerCounts : topVisitedLinks) {
+        for (UrlShortener urlShortenerRequestDTO : topVisitedLinks) {
             LinkCountsDTO countsDTO = new LinkCountsDTO();
-            countsDTO.setVisitCount(linksShortenerCounts.getVisitCount());
+            countsDTO.setLinkCounts(urlShortenerRequestDTO.getVisitCount());
             topVisitedLinksDTOs.add(countsDTO);
         }
 
