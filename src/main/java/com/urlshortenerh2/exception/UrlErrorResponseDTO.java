@@ -1,4 +1,4 @@
-package com.urlshortenerh2.dto;
+package com.urlshortenerh2.exception;
 
 import lombok.Getter;
 import lombok.Setter;

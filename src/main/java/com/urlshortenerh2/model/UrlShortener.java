@@ -9,9 +9,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity (name = "links")
+@Table(name = "links")
 @Getter
 @Setter
-@Table(name = "links")
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
@@ -45,14 +45,6 @@ public class UrlShortener {
 
     @Column(name = "visitCount")
     @NotNull(message = "{field.notnull}")
-    @NotEmpty(message = "{field.notempty}")
-    public int visitCount;
+    public Long visitCount;
 
-    public int getVisitCount() {
-        return visitCount;
-    }
-
-    public void setVisitCount(int visitCount) {
-        this.visitCount = visitCount;
-    }
 }

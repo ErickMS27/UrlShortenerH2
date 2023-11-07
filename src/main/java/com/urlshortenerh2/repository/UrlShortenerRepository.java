@@ -1,6 +1,5 @@
 package com.urlshortenerh2.repository;
 
-import com.urlshortenerh2.model.LinkCounts;
 import com.urlshortenerh2.model.UrlShortener;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

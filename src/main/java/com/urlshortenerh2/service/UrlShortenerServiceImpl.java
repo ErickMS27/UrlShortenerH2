@@ -1,9 +1,8 @@
 package com.urlshortenerh2.service;
 
 import com.google.common.hash.Hashing;
-import com.urlshortenerh2.dto.LinkCountsDTO;
-import com.urlshortenerh2.model.UrlShortener;
 import com.urlshortenerh2.dto.UrlShortenerRequestDTO;
+import com.urlshortenerh2.model.UrlShortener;
 import com.urlshortenerh2.repository.UrlShortenerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,14 +14,17 @@ import javax.validation.constraints.NotNull;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Component
 public class UrlShortenerServiceImpl implements UrlShortenerService {
-
-    private static final Logger logger = LoggerFactory.getLogger(UrlShortenerServiceImpl.class);
     @Autowired
     private UrlShortenerRepository urlShortenerRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(UrlShortenerServiceImpl.class);
 
     @Override
     public @NotNull @NotEmpty String generateShortLink(UrlShortenerRequestDTO urlShortenerRequestDTO) {
@@ -71,19 +73,26 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
     }
 
     @Override
-    public List<UrlShortener> getTop10VisitedLinks(Integer linkCounts) {
+    public List<UrlShortener> getTop10VisitedLinks() {
         List<UrlShortener> topVisitedLinks = urlShortenerRepository.findTop10ByOrderByVisitCountDesc();
-//        if (topVisitedLinks == null) {
-//            topVisitedLinks = new ArrayList<>();
-//        }
-
-        List<LinkCountsDTO> topVisitedLinksDTOs = new ArrayList<>();
+        List<UrlShortener> topVisitedLinksDTO = new ArrayList<>();
         for (UrlShortener urlShortenerRequestDTO : topVisitedLinks) {
-            LinkCountsDTO countsDTO = new LinkCountsDTO();
-            countsDTO.setLinkCounts(urlShortenerRequestDTO.getVisitCount());
-            topVisitedLinksDTOs.add(countsDTO);
+            UrlShortener countsDTO = new UrlShortener();
+            countsDTO.setVisitCount(countsDTO.visitCount);
+            topVisitedLinksDTO.add(countsDTO);
         }
-
         return topVisitedLinks;
     }
-}
+    @Override
+    public Long countMostAccessedViews(UrlShortenerRequestDTO urlShortenerRequestDTO) {
+        List<UrlShortener> urlList = urlShortenerRepository.findAll();
+        Map<Long, List<UrlShortener>> viewsCountMap = urlList.stream()
+                .collect(Collectors.groupingBy(UrlShortener::getVisitCount));
+
+        long maxViews = viewsCountMap.keySet().stream()
+                .max(Long::compareTo)
+                .orElse(0L);
+
+        return maxViews;
+        }
+    }

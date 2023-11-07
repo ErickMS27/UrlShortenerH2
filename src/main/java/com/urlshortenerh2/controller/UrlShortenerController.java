@@ -1,9 +1,8 @@
 package com.urlshortenerh2.controller;
 
-import com.urlshortenerh2.dto.LinkCountsDTO;
-import com.urlshortenerh2.dto.UrlErrorResponseDTO;
 import com.urlshortenerh2.dto.UrlShortenerRequestDTO;
 import com.urlshortenerh2.dto.UrlShortenerResponseDTO;
+import com.urlshortenerh2.exception.UrlErrorResponseDTO;
 import com.urlshortenerh2.model.UrlShortener;
 import com.urlshortenerh2.service.UrlShortenerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -25,11 +24,7 @@ public class UrlShortenerController
     @Autowired
     private UrlShortenerService urlShortenerService;
 
-//    public UrlShortenerController(UrlShortenerService urlShortenerService) {
-//        this.urlShortenerService = urlShortenerService;
-//    }
-
-    @PostMapping
+    @PostMapping("/generate")
     public ResponseEntity<UrlShortenerResponseDTO> generateShortLink(@RequestBody UrlShortenerRequestDTO urlShortenerRequestDTO) {
 
         String longLink = urlShortenerRequestDTO.getLongLink();
@@ -42,16 +37,27 @@ public class UrlShortenerController
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/top-10-visited")
-    public ResponseEntity<List<UrlShortener>>getTop10VisitedLinks(@RequestBody LinkCountsDTO linkCountsDTO) {
+    @PostMapping("/count")
+    public ResponseEntity<UrlShortenerResponseDTO> countMostAccessView(@RequestBody UrlShortenerRequestDTO urlShortenerRequestDTO) {
+        UrlShortenerResponseDTO responseDTO = new UrlShortenerResponseDTO();
+        Long viewCount = urlShortenerService.countMostAccessedViews(urlShortenerRequestDTO);
 
-        Integer top10VisitedLinks = linkCountsDTO.getLinkCounts();
-        List<UrlShortener> topVisitedLinks = urlShortenerService.getTop10VisitedLinks(top10VisitedLinks);
+        if (viewCount != null) {
+            responseDTO.setVisitCount(Long.valueOf("Total de visualizações mais acessadas: " + viewCount));
+            return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        } else {
+            responseDTO.setVisitCount(Long.valueOf("Erro ao contar visualizações mais acessadas."));
+            return new ResponseEntity<>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
+    @GetMapping("/top10visited")
+    public ResponseEntity<List<UrlShortener>> getTop10VisitedLinks() {
+        List<UrlShortener> topVisitedLinks = urlShortenerService.getTop10VisitedLinks();
         return ResponseEntity.ok(topVisitedLinks);
     }
 
-    @GetMapping("/{shortLink}")
+    @GetMapping("/linkShort")
     public ResponseEntity<?> redirectTolongLink(@PathVariable String shortLink, HttpServletResponse response)
             throws IOException {
 
