@@ -15,7 +15,9 @@ public interface UrlShortenerService {
     public String generateShortLink(UrlShortenerRequestDTO urlShortenerRequestDTO);
     public UrlShortener persistShortLink(UrlShortener urlShortener);
     public List<UrlShortener> getTop10VisitedLinks();
+    public Long increaseAccessedViews(UrlShortenerRequestDTO urlShortenerRequestDTO);
     public Long countMostAccessedViews(UrlShortenerRequestDTO urlShortenerRequestDTO);
     public UrlShortener getEncodedUrl(String urlShortener);
     public void deleteShortLink(UrlShortener urlShortener);
+
 }

@@ -2,6 +2,7 @@ package com.urlshortenerh2.service;
 
 import com.google.common.hash.Hashing;
 import com.urlshortenerh2.dto.UrlShortenerRequestDTO;
+import com.urlshortenerh2.exception.UrlNotFoundException;
 import com.urlshortenerh2.model.UrlShortener;
 import com.urlshortenerh2.repository.UrlShortenerRepository;
 import org.slf4j.Logger;
@@ -13,11 +14,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Map;
 import java.util.List;
-import java.util.stream.Collectors;
-
 
 @Component
 public class UrlShortenerServiceImpl implements UrlShortenerService {
@@ -25,6 +22,7 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
     private UrlShortenerRepository urlShortenerRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(UrlShortenerServiceImpl.class);
+    private UrlShortenerRequestDTO urlShortenerRequestDTO;
 
     @Override
     public @NotNull @NotEmpty String generateShortLink(UrlShortenerRequestDTO urlShortenerRequestDTO) {
@@ -74,25 +72,35 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
 
     @Override
     public List<UrlShortener> getTop10VisitedLinks() {
-        List<UrlShortener> topVisitedLinks = urlShortenerRepository.findTop10ByOrderByVisitCountDesc();
-        List<UrlShortener> topVisitedLinksDTO = new ArrayList<>();
-        for (UrlShortener urlShortenerRequestDTO : topVisitedLinks) {
-            UrlShortener countsDTO = new UrlShortener();
-            countsDTO.setVisitCount(countsDTO.visitCount);
-            topVisitedLinksDTO.add(countsDTO);
-        }
-        return topVisitedLinks;
+        return urlShortenerRepository.findTop10ByOrderByVisitCountDesc();
     }
+
     @Override
     public Long countMostAccessedViews(UrlShortenerRequestDTO urlShortenerRequestDTO) {
         List<UrlShortener> urlList = urlShortenerRepository.findAll();
-        Map<Long, List<UrlShortener>> viewsCountMap = urlList.stream()
-                .collect(Collectors.groupingBy(UrlShortener::getVisitCount));
-
-        long maxViews = viewsCountMap.keySet().stream()
-                .max(Long::compareTo)
-                .orElse(0L);
-
+        Long maxViews = urlList.stream()
+                .mapToLong(UrlShortener::getVisitCount)
+                .max()
+                .orElse(0);
         return maxViews;
+    }
+
+    @Override
+    public Long increaseAccessedViews(UrlShortenerRequestDTO urlShortenerRequestDTO) {
+        String longLink = urlShortenerRequestDTO.getLongLink();
+
+        UrlShortener urlToRet = urlShortenerRepository.findByLongLink(longLink);
+
+        if (urlToRet != null) {
+            if (urlToRet.getVisitCount() == null) {
+                urlToRet.setVisitCount(0L);
+            }
+            urlToRet.setVisitCount(urlToRet.getVisitCount() + 1);
+            urlShortenerRepository.save(urlToRet);
+            return urlToRet.getVisitCount();
+        } else {
+            throw new UrlNotFoundException("URL longo não encontrado: " + longLink);
         }
     }
+
+}
