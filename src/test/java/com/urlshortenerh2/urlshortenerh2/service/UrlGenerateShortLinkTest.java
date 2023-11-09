@@ -1,26 +1,64 @@
 package com.urlshortenerh2.urlshortenerh2.service;
 
+import com.urlshortenerh2.controller.UrlShortenerController;
+import com.urlshortenerh2.exception.UrlErrorResponseDTO;
 import com.urlshortenerh2.dto.UrlShortenerRequestDTO;
+import com.urlshortenerh2.dto.UrlShortenerResponseDTO;
 import com.urlshortenerh2.service.UrlShortenerService;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 class UrlGenerateShortLinkTest {
 
-    @Autowired
+    @Mock
     private UrlShortenerService urlShortenerService;
 
+    @InjectMocks
+    private UrlShortenerController urlShortenerController;
+
     @Test
-    void testGenerateShortLink(){
+    void testGenerateShortLink_Success() {
+        when(urlShortenerService.generateShortLink(any())).thenReturn("https://short.url/441a1c77");
+        when(urlShortenerService.increaseAccessedViews(any())).thenReturn(1L);
+
         UrlShortenerRequestDTO requestDTO = new UrlShortenerRequestDTO();
         requestDTO.setLongLink("https://www.youtube.com/");
 
-        String shortLink = urlShortenerService.generateShortLink(requestDTO);
+        ResponseEntity<UrlShortenerResponseDTO> responseEntity = urlShortenerController.generateShortLink(requestDTO);
 
-        assertNotNull(shortLink);
-        assertFalse(shortLink.isEmpty());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        UrlShortenerResponseDTO responseDTO = responseEntity.getBody();
+        assertEquals("https://www.youtube.com/", responseDTO.getLongLink());
+        assertEquals("https://short.url/441a1c77", responseDTO.getShortLink());
+        assertEquals(1L, responseDTO.getVisitCount());
+    }
+
+    @Test
+    void testGenerateShortLink_Failure() {
+
+        when(urlShortenerService.generateShortLink(any())).thenReturn("");
+
+        UrlShortenerRequestDTO requestDTO = new UrlShortenerRequestDTO();
+        requestDTO.setLongLink("https://www.youtube.com/");
+
+        ResponseEntity<UrlShortenerResponseDTO> responseEntity = urlShortenerController.generateShortLink(requestDTO);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
+
+        if (responseEntity.getBody() != null) {
+            assertEquals(UrlErrorResponseDTO.class, responseEntity.getBody().getClass());
+        }
+
+            UrlErrorResponseDTO errorResponseDTO = (UrlShortenerErrorResponseDTO) responseEntity.getBody();
+        assertEquals("Erro ao gerar a URL curta", errorResponseDTO.getError());
+        assertEquals("500", errorResponseDTO.getStatus());
     }
 }
