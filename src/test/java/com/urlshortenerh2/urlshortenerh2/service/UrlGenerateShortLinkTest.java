@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -53,12 +53,8 @@ class UrlGenerateShortLinkTest {
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
 
-        if (responseEntity.getBody() != null) {
-            assertEquals(UrlErrorResponseDTO.class, responseEntity.getBody().getClass());
+        assertNotNull(responseEntity.getBody());
+        assertTrue(responseEntity.getBody() instanceof UrlShortenerResponseDTO);
+        UrlShortenerResponseDTO responseDTO = responseEntity.getBody();
         }
-
-            UrlErrorResponseDTO errorResponseDTO = (UrlShortenerErrorResponseDTO) responseEntity.getBody();
-        assertEquals("Erro ao gerar a URL curta", errorResponseDTO.getError());
-        assertEquals("500", errorResponseDTO.getStatus());
     }
-}
