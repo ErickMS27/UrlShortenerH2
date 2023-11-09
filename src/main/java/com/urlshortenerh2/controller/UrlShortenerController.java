@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -27,9 +28,17 @@ public class UrlShortenerController
 
     @PostMapping("/generate")
     public ResponseEntity<UrlShortenerResponseDTO> generateShortLink(@RequestBody UrlShortenerRequestDTO urlShortenerRequestDTO) {
+        String shortLink = urlShortenerService.generateShortLink(urlShortenerRequestDTO);
+
+        if (StringUtils.isEmpty(shortLink)) {
+            UrlErrorResponseDTO errorResponseDTO = new UrlErrorResponseDTO();
+            errorResponseDTO.setError("Erro ao gerar a URL curta");
+            errorResponseDTO.setStatus("500");
+            return new ResponseEntity<UrlShortenerResponseDTO>((MultiValueMap<String, String>) errorResponseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
         Long viewCount = urlShortenerService.increaseAccessedViews(urlShortenerRequestDTO);
         String longLink = urlShortenerRequestDTO.getLongLink();
-        String shortLink = urlShortenerService.generateShortLink(urlShortenerRequestDTO);
 
         UrlShortenerResponseDTO responseDTO = new UrlShortenerResponseDTO();
         responseDTO.setLongLink(longLink);
@@ -38,6 +47,7 @@ public class UrlShortenerController
 
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
+
 
     @GetMapping("/count")
     public ResponseEntity<UrlShortenerResponseDTO> countMostAccessView(@RequestBody UrlShortenerRequestDTO urlShortenerRequestDTO, UrlShortenerResponseDTO urlShortenerResponseDTO) {
