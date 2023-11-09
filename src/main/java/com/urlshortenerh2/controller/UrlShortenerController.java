@@ -6,7 +6,6 @@ import com.urlshortenerh2.exception.UrlErrorResponseDTO;
 import com.urlshortenerh2.model.UrlShortener;
 import com.urlshortenerh2.service.UrlShortenerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import lombok.var;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,7 +47,6 @@ public class UrlShortenerController
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
-
     @GetMapping("/count")
     public ResponseEntity<UrlShortenerResponseDTO> countMostAccessView(@RequestBody UrlShortenerRequestDTO urlShortenerRequestDTO, UrlShortenerResponseDTO urlShortenerResponseDTO) {
         UrlShortenerResponseDTO responseDTO = new UrlShortenerResponseDTO();
@@ -64,7 +62,6 @@ public class UrlShortenerController
             return new ResponseEntity<>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 
     @GetMapping("/top10visited")
     public ResponseEntity<List<UrlShortener>> getTop10VisitedLinks() {

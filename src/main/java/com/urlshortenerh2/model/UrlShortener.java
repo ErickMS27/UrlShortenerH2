@@ -36,12 +36,7 @@ public class UrlShortener {
     @Column(name = "estimatedTime")
     @NotNull(message = "{field.notnull}")
     @NotEmpty(message = "{field.notempty}")
-    private LocalDateTime estimatedTime;
-
-    @Column(name = "createdTime")
-    @NotNull(message = "{field.notnull}")
-    @NotEmpty(message = "{field.notempty}")
-    private LocalDateTime createdTime;
+    private LocalDateTime estimatedTime = LocalDateTime.now();
 
     @Column(name = "visitCount")
     @NotNull(message = "{field.notnull}")
