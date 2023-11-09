@@ -23,7 +23,12 @@ import java.util.List;
 public class UrlShortenerController
 {
     @Autowired
-    private UrlShortenerService urlShortenerService;
+    private final UrlShortenerService urlShortenerService;
+
+    @Autowired
+    public UrlShortenerController(UrlShortenerService urlShortenerService) {
+        this.urlShortenerService = urlShortenerService;
+    }
 
     @PostMapping("/generate")
     public ResponseEntity<UrlShortenerResponseDTO> generateShortLink(@RequestBody UrlShortenerRequestDTO urlShortenerRequestDTO) {
