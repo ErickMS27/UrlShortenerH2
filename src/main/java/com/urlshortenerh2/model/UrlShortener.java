@@ -9,9 +9,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity (name = "links")
+@Table(name = "links")
 @Getter
 @Setter
-@Table(name = "links")
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
@@ -36,11 +36,10 @@ public class UrlShortener {
     @Column(name = "estimatedTime")
     @NotNull(message = "{field.notnull}")
     @NotEmpty(message = "{field.notempty}")
-    private LocalDateTime estimatedTime;
+    private LocalDateTime estimatedTime = LocalDateTime.now();
 
-    @Column(name = "createdTime")
+    @Column(name = "visitCount")
     @NotNull(message = "{field.notnull}")
-    @NotEmpty(message = "{field.notempty}")
-    private LocalDateTime createdTime;
+    public Long visitCount;
 
 }
