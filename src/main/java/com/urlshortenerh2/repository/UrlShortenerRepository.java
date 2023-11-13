@@ -12,4 +12,5 @@ public interface UrlShortenerRepository extends JpaRepository<UrlShortener,Long>
     public UrlShortener findByShortLink(String shortLink);
     public UrlShortener findByLongLink(String longLink);
     public List<UrlShortener> findTop10ByOrderByVisitCountDesc();
+    public List<UrlShortener> findTenFirstsByOrderByCountViewDesc();
 }

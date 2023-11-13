@@ -1,7 +1,9 @@
 package com.urlshortenerh2.service;
 
+import com.urlshortenerh2.dto.UrlDetailDTO;
 import com.urlshortenerh2.model.UrlShortener;
 import com.urlshortenerh2.dto.UrlShortenerRequestDTO;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotEmpty;
@@ -20,4 +22,5 @@ public interface UrlShortenerService {
     public UrlShortener getEncodedUrl(String urlShortener);
     public void deleteShortLink(UrlShortener urlShortener);
 
+    public UrlDetailDTO detailUrlForId(Long id);
 }

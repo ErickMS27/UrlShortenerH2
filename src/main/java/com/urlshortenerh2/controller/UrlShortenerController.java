@@ -1,5 +1,6 @@
 package com.urlshortenerh2.controller;
 
+import com.urlshortenerh2.dto.UrlDetailDTO;
 import com.urlshortenerh2.dto.UrlShortenerRequestDTO;
 import com.urlshortenerh2.dto.UrlShortenerResponseDTO;
 import com.urlshortenerh2.exception.UrlErrorResponseDTO;
@@ -101,6 +102,17 @@ public class UrlShortenerController
 
         response.sendRedirect(urlToRet.getLongLink());
         return new ResponseEntity<>(urlShortenerResponseDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/detailfor/{id}")
+    public ResponseEntity<UrlDetailDTO> detailUrlForId(@PathVariable Long id) {
+        UrlDetailDTO detailDTO = urlShortenerService.detailUrlForId(id);
+
+        if(detailDTO != null){
+            return ResponseEntity.ok(detailDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

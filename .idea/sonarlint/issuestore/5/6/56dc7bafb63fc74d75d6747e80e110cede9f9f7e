@@ -1,5 +1,9 @@
 
 }
-java:S14888"`Immediately return this expression instead of assigning it to the temporary variable "urlToRet".(€ß—œ8¨ƒÎ®¹1
+java:S1488:"`Immediately return this expression instead of assigning it to the temporary variable "urlToRet".(€ß—œ8œÃŞª»1
 }
-java:S1488>"`Immediately return this expression instead of assigning it to the temporary variable "urlToRet".(ÙƒÜì8¨ƒÎ®¹1
+java:S1488@"`Immediately return this expression instead of assigning it to the temporary variable "urlToRet".(ÙƒÜì8ŸÃŞª»1
+}
+java:S1488Q"`Immediately return this expression instead of assigning it to the temporary variable "maxViews".(† ®ı8 ÃŞª»1
+_
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8ùíÈ¼1
