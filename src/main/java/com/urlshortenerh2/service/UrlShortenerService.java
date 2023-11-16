@@ -1,9 +1,10 @@
 package com.urlshortenerh2.service;
 
 import com.urlshortenerh2.dto.UrlDetailDTO;
-import com.urlshortenerh2.model.UrlShortener;
 import com.urlshortenerh2.dto.UrlShortenerRequestDTO;
-import org.springframework.data.domain.PageRequest;
+import com.urlshortenerh2.model.UrlShortener;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotEmpty;
@@ -21,6 +22,8 @@ public interface UrlShortenerService {
     public Long countMostAccessedViews(UrlShortenerRequestDTO urlShortenerRequestDTO);
     public UrlShortener getEncodedUrl(String urlShortener);
     public void deleteShortLink(UrlShortener urlShortener);
-
     public UrlDetailDTO detailUrlForId(Long id);
+    public Page<UrlDetailDTO> listPage(Pageable pages);
+    public void deleteUrlForId(Long id);
+    public UrlShortener updateLongLink(Long id, String longLink);
 }

@@ -1,6 +1,7 @@
 package com.urlshortenerh2.urlshortenerh2.controller;
 
 import com.urlshortenerh2.controller.UrlShortenerController;
+import com.urlshortenerh2.dto.UpdateUrlDTO;
 import com.urlshortenerh2.dto.UrlDetailDTO;
 import com.urlshortenerh2.dto.UrlShortenerRequestDTO;
 import com.urlshortenerh2.dto.UrlShortenerResponseDTO;
@@ -26,14 +27,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static javax.management.Query.eq;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -63,33 +59,33 @@ class UrlShortenerControllerTest {
     }
 
     @Test
-    @DisplayName("Retorne o código HTTP400 quando as informações não estão validadas");
-    void scenario1(){
+    @DisplayName("Retorne o código HTTP400 quando as informações não estão validadas")
+    void scenario1() throws Exception {
             var response = mvc.perform(post("/api/urlshortener"))
                     .andReturn().getResponse();
             assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         }
 
     @Test
-    @DisplayName("Retorne o código HTTP200 quando as informações não estão validadas");
-    void scenario2 () throws Exception{
-        UrlShortenerRequestDTO urlRequestTest = new UrlShortenerRequestDTO();
-        urlRequestTest.setLongLink("https://cursos.alura.com.br/dashboard");
+    @DisplayName("Retorne o código HTTP200 quando as informações não estão validadas")
+    void scenario2() throws Exception {
+        UrlShortenerRequestDTO testLink = new UrlShortenerRequestDTO();
+        testLink.setLongLink("https://cursos.alura.com.br/dashboard");
 
         var urlShortenerResponse = new UrlShortenerResponseDTO();
         urlShortenerResponse.setShortLink("/api/00ad38cf");
 
-        when(urlShortenerService.generateShortLink(any())).thenReturn(urlShortenerResponse);
+        when(urlShortenerService.generateShortLink(any())).thenReturn(String.valueOf(urlShortenerResponse));
 
         var response = mvc.perform(post("/api/urlshortener")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(urlShortenerResponseJacksonTester.write(urlRequestTest).getJson())
-        )
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(urlShortenerRequestJacksonTester.write(testLink).getJson())
+                )
                 .andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 
-        var calledJson = urlShortenerResponseJacksonTester.write((urlShortenerResponse).getJson();
+        var calledJson = urlShortenerResponseJacksonTester.write(urlShortenerResponse).getJson();
         assertThat(response.getContentAsString()).isEqualTo(calledJson);
     }
 
@@ -99,7 +95,7 @@ class UrlShortenerControllerTest {
     String key = "non-existent-key";
     String shortLink = "http://localhost/" + key;
 
-    when(urlShortenerService.generateShortLink(eq(shortLink))).thenReturn(null);
+        when(urlShortenerService.generateShortLink(any(UrlShortenerRequestDTO.class))).thenReturn(null);
 
     var response = mvc.perform(MockMvcRequestBuilders.get("/" + key))
             .andReturn().getResponse();
@@ -112,37 +108,38 @@ class UrlShortenerControllerTest {
     @DisplayName("Detalhar Url por ID - URL Found")
     void scenario4(){
         Long id = 1L;
-        UrlDetailDTO urlDetailDTO = new UrlDetailDTO(id, "http://urlshort/abc123", "http://www.example.com", 5L);
-        when(UrlShortenerService.urlDetailForId(id)).theReturn(urlDetailDTO);
+        UrlDetailDTO urlDetailDTO = new UrlDetailDTO(id, "http://urlshort/abc123",
+                "http://www.example.com", 5L);
+        when(urlShortenerService.detailUrlForId(id)).thenReturn(urlDetailDTO);
 
-        ResponseEntity<UrlDetailDTO> response = UrlShortenerController.urlDetailForId(id);
+        ResponseEntity<UrlDetailDTO> response = urlShortenerController.detailUrlForId(id);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(UrlDetailDTO, response.getBody());
+        assertEquals(urlDetailDTO, response.getBody());
     }
 
     @Test
     @DisplayName("Detalhar Url por ID - URL Not Found")
     void scenario5(){
         Long id = 1L;
-        when(urlShortenerService.detailUrlForId(id).thenReturn(null));
+        when(urlShortenerService.detailUrlForId(id)).thenReturn(null);
 
         ResponseEntity<UrlDetailDTO> response = urlShortenerController.detailUrlForId(id);
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
     @DisplayName("Listar URL")
     void scenario6(){
         PageRequest pageRequest = PageRequest.of(0,10);
-        Page<UrlDetailDTO> page = mock(Page.class);
-        when(urlShortenerService.listPage(pageRequest)).thenReturn(page);
+        Page<UrlDetailDTO> emptyPage = Page.empty();
+        when(urlShortenerService.listPage(pageRequest)).thenReturn((Page<UrlDetailDTO>) emptyPage);
 
         ResponseEntity<Page<UrlDetailDTO>> response = urlShortenerController.listUrl(pageRequest);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isEqualTo(page);
+        assertThat(response.getBody()).isEqualTo(emptyPage);
     }
 
     @Test
@@ -177,36 +174,11 @@ class UrlShortenerControllerTest {
     void scenario9(){
         Long id = 1L;
         String newLongLink = "http://www.new-example.com";
-        UpdateUrlDTO updateUrl = UpdateUrlDTO();
+        UpdateUrlDTO updateUrl = new UpdateUrlDTO();
         when(urlShortenerService.updateLongLink(id, newLongLink)).thenReturn(null);
 
         ResponseEntity<String> response = urlShortenerController.updateLongLink(updateUrl);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-    }
-
-    @Test
-    @DisplayName("Liste os Top 10 Url's")
-    void scenario10(){
-
-        List<UrlShortener> top10urls = createTop10Urls() {
-            when(urlShortenerService.getTop10VisitedLinks()).thenReturn(top10urls);
-
-            List<UrlShortener> response = UrlShortenerController.getTop10VisitedLinks();
-
-            assertThat(response).isEqualTo(top10urls);
-    }
-
-    private List<UrlShortener> createTop10Urls(){
-            List<UrlShortener> urls = new ArrayList<>();
-            for (int i =1; i <=10; i++){
-                UrlShortener url = new UrlShortener();
-                url.setId((long) i);
-                url.setShortLink("http://urlshortener/" + i);
-                url.setLongLink("http://www.example.com/" + i);
-                urls.add(url);
-            }
-            return urls;
-        }
     }
 }

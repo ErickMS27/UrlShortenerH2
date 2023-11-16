@@ -1,5 +1,6 @@
 package com.urlshortenerh2.controller;
 
+import com.urlshortenerh2.dto.UpdateUrlDTO;
 import com.urlshortenerh2.dto.UrlDetailDTO;
 import com.urlshortenerh2.dto.UrlShortenerRequestDTO;
 import com.urlshortenerh2.dto.UrlShortenerResponseDTO;
@@ -9,17 +10,22 @@ import com.urlshortenerh2.service.UrlShortenerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/urlshortener")
 @SecurityRequirement(name = "bearer-key")
 public class UrlShortenerController
 {
@@ -53,6 +59,20 @@ public class UrlShortenerController
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
+    @PutMapping
+    @Transactional
+    public ResponseEntity<String> updateLongLink(UpdateUrlDTO updateUrl) {
+        Long id = updateUrl.getId();
+        String newLongUrl = updateUrl.getLongLink();
+        UrlShortener updatedUrlShortened = urlShortenerService.updateLongLink(id, newLongUrl);
+
+        if (updatedUrlShortened != null) {
+            return ResponseEntity.ok("Long URL updated successfully.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("/count")
     public ResponseEntity<UrlShortenerResponseDTO> countMostAccessView(@RequestBody UrlShortenerRequestDTO urlShortenerRequestDTO, UrlShortenerResponseDTO urlShortenerResponseDTO) {
         UrlShortenerResponseDTO responseDTO = new UrlShortenerResponseDTO();
@@ -69,14 +89,14 @@ public class UrlShortenerController
         }
     }
 
-    @GetMapping("/top10visited")
+    @GetMapping("/top10links")
     public ResponseEntity<List<UrlShortener>> getTop10VisitedLinks() {
         List<UrlShortener> topVisitedLinks = urlShortenerService.getTop10VisitedLinks();
         return ResponseEntity.ok(topVisitedLinks);
     }
 
     @GetMapping("/{shortLink}")
-    public ResponseEntity<?> redirectTolongLink(@PathVariable String shortLink, HttpServletResponse response)
+    public ResponseEntity<?> redirectToLongLink(@PathVariable String shortLink, HttpServletResponse response)
             throws IOException {
 
         if(StringUtils.isEmpty(shortLink))
@@ -104,7 +124,7 @@ public class UrlShortenerController
         return new ResponseEntity<>(urlShortenerResponseDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/detailfor/{id}")
+    @GetMapping("/detailUrlFor/{id}")
     public ResponseEntity<UrlDetailDTO> detailUrlForId(@PathVariable Long id) {
         UrlDetailDTO detailDTO = urlShortenerService.detailUrlForId(id);
 
@@ -113,6 +133,17 @@ public class UrlShortenerController
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    public ResponseEntity<Page<UrlDetailDTO>> listUrl(@PageableDefault(size = 10, sort = "id") Pageable pages) {
+    Page<UrlDetailDTO> page = (Page<UrlDetailDTO>) urlShortenerService.listPage((PageRequest) pages);
+        return ResponseEntity.ok(page);
+    }
+
+    @DeleteMapping("/deleteUrl/{id}")
+    public ResponseEntity<Void> deleteUrl(@PathVariable Long id) {
+        urlShortenerService.deleteUrlForId(id);
+    return ResponseEntity.noContent().build();
     }
 
 }

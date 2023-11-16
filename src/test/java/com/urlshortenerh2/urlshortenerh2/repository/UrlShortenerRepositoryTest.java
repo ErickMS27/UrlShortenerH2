@@ -62,7 +62,7 @@ class UrlShortenerRepositoryTest {
         for (int i = 0; i < 15; i++){
             urlShortenerRepository.save(new UrlShortener("short" + i, "long" + i, (long) i));
         }
-        List<UrlShortener> first10Urls = urlShortenerRepository.findTenFirstsByOrderByCountViewDesc();
+        List<UrlShortener> first10Urls = urlShortenerRepository.findTop10ByOrderByVisitCountDesc();
         assertEquals(10,first10Urls.size());
         assertEquals("short14", first10Urls.get(0).getShortLink());
         assertEquals("short5", first10Urls.get(9).getShortLink());
@@ -71,7 +71,7 @@ class UrlShortenerRepositoryTest {
     @Test
     @DisplayName("Se existem menos de 10 links no DB")
     void findTenFirstsByOrderByCountViewDesc_ShouldReturnEmptyIfIsShortLinksFewerThanTen(){
-        List<UrlShortener> first10Urls = urlShortenerRepository.findTenFirstsByOrderByCountViewDesc();
+        List<UrlShortener> first10Urls = urlShortenerRepository.findTop10ByOrderByVisitCountDesc();
         assertTrue(first10Urls.isEmpty());
     }
 

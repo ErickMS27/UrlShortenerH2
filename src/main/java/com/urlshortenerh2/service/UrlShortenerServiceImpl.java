@@ -1,6 +1,7 @@
 package com.urlshortenerh2.service;
 
 import com.google.common.hash.Hashing;
+import com.urlshortenerh2.dto.UrlDetailDTO;
 import com.urlshortenerh2.dto.UrlShortenerRequestDTO;
 import com.urlshortenerh2.exception.UrlNotFoundException;
 import com.urlshortenerh2.model.UrlShortener;
@@ -8,13 +9,17 @@ import com.urlshortenerh2.repository.UrlShortenerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.List;
+import java.util.Random;
 
 @Component
 public class UrlShortenerServiceImpl implements UrlShortenerService {
@@ -38,6 +43,17 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
             urlShortenerRepository.save(urlToPersist);
             return encodedUrl;
         }
+    }
+
+    public String generateShortLinkUrl(String longUrl) {
+        Random random = new Random();
+        byte[] randomBytes = new byte[6];
+        random.nextBytes(randomBytes);
+        String shortUrl = Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
+        String websiteName = getWebsiteName(longUrl);
+        String combinedShortUrl = websiteName + "/" + shortUrl;
+
+        return combinedShortUrl;
     }
 
     public String encodeUrl(String url) {
@@ -69,6 +85,43 @@ public class UrlShortenerServiceImpl implements UrlShortenerService {
     public void deleteShortLink(UrlShortener urlShortener) {
         urlShortenerRepository.delete(urlShortener);
     }
+
+    public UrlShortener updateLongLink(Long id, String longLink){
+        UrlShortener settedShortedLink = urlShortenerRepository.findById(id).orElse(null);
+        if (settedShortedLink != null) {
+            settedShortedLink.setLongLink(longLink);
+            String newShortedLink = generateShortLinkUrl(longLink);
+            settedShortedLink.setShortLink(newShortedLink);
+            return urlShortenerRepository.save(settedShortedLink);
+        }else{
+            return null;
+        }
+    }
+
+    public UrlDetailDTO detailUrlForId(Long id) {
+        UrlShortener urlShortener = urlShortenerRepository.findById(id).orElse(null);
+        if (urlShortener != null){
+            return new UrlDetailDTO(urlShortener);
+        } else {
+        return null;
+        }
+    }
+
+    private static String getWebsiteName(String websiteName) {
+        websiteName = websiteName.toLowerCase();
+        if (websiteName.contains("http") || websiteName.contains("www")) {
+            websiteName = websiteName.substring(websiteName.indexOf(".") + 1);
+        }
+        return websiteName;
+    }
+
+    public void deleteUrlForId(Long id){
+        urlShortenerRepository.deleteById(id);
+    }
+
+public Page<UrlDetailDTO> listPage(Pageable pages){
+    return urlShortenerRepository.findAllProjectBy(pages);
+}
 
     @Override
     public List<UrlShortener> getTop10VisitedLinks() {

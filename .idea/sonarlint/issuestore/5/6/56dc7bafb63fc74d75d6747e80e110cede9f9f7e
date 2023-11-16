@@ -1,9 +1,13 @@
 
+„
+java:S14886"hImmediately return this expression instead of assigning it to the temporary variable "combinedShortUrl".(ÎÏ×y8 îÀ½1
 }
-java:S1488:"`Immediately return this expression instead of assigning it to the temporary variable "urlToRet".(€ß—œ8œÃŞª»1
+java:S1488J"`Immediately return this expression instead of assigning it to the temporary variable "urlToRet".(€ß—œ8 îÀ½1
 }
-java:S1488@"`Immediately return this expression instead of assigning it to the temporary variable "urlToRet".(ÙƒÜì8ŸÃŞª»1
-}
-java:S1488Q"`Immediately return this expression instead of assigning it to the temporary variable "maxViews".(† ®ı8 ÃŞª»1
+java:S1488P"`Immediately return this expression instead of assigning it to the temporary variable "urlToRet".(ÙƒÜì8 îÀ½1
+~
+java:S1488†"`Immediately return this expression instead of assigning it to the temporary variable "maxViews".(† ®ı8¡îÀ½1
 _
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8ùíÈ¼1
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8µîÀ½1
+:
+java:S21191"Save and re-use this "Random".(¼İÅf8¾îÀ½1

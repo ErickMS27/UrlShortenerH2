@@ -17,6 +17,8 @@ public class UrlDetailDTO {
     String longLink;
     Long visitCounts;
 
+
+
     public UrlDetailDTO(UrlShortener urlShortener){
          this(urlShortener.getId(), urlShortener.getShortLink(), urlShortener.getShortLink(), urlShortener.getLongLink(),
                 urlShortener.getVisitCount());

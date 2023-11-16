@@ -42,4 +42,16 @@ public class UrlShortener {
     @NotNull(message = "{field.notnull}")
     public Long visitCount;
 
+    public UrlShortener (String short1, String long1){
+        this.shortLink = short1;
+        this.longLink = long1;
+    }
+
+    public UrlShortener (String short2, String long2, Long count){
+        this.shortLink = short2;
+        this.longLink = long2;
+        this.visitCount = count;
+
+    }
+
 }

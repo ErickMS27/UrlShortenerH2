@@ -31,3 +31,7 @@ s
 Csrc/main/java/com/urlshortenerh2/exception/UrlErrorResponseDTO.java,8\5\854b1cc3d3e63bd72c1da366c0be61b5bc169341
 f
 6src/main/java/com/urlshortenerh2/dto/UrlDetailDTO.java,2\a\2a58ad5331334ff33d30dc8518c5c4a5e8155f3c
+f
+6src/main/java/com/urlshortenerh2/dto/UpdateUrlDTO.java,6\2\6298d67e1820fbd2390978c159cd06720136ad72
+i
+9src/main/java/com/urlshortenerh2/service/UserService.java,4\f\4fa00f5254f20ebc051aa72d4b71685924e065af
