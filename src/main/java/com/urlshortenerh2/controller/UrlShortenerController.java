@@ -57,15 +57,20 @@ public class UrlShortenerController
 
     @PutMapping
     @Transactional
-    public ResponseEntity<String> updateLongLink(UpdateUrlDTO updateUrl) {
+    public ResponseEntity<String> updateLongLink(@RequestBody UpdateUrlDTO updateUrl) {
         Long id = updateUrl.getId();
         String newLongUrl = updateUrl.getLongLink();
-        UrlShortener updatedUrlShortened = urlShortenerService.updateLongLink(id, newLongUrl);
 
-        if (updatedUrlShortened != null) {
-            return ResponseEntity.ok("Long URL updated successfully.");
+        if (id != null && newLongUrl != null) {
+            UrlShortener updatedUrlShortened = urlShortenerService.updateLongLink(id, newLongUrl);
+
+            if (updatedUrlShortened != null) {
+                return ResponseEntity.ok("Long URL updated successfully.");
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().body("Invalid input data.");
         }
     }
 

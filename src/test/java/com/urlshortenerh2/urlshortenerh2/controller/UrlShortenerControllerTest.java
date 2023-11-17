@@ -61,19 +61,21 @@ class UrlShortenerControllerTest {
     @Test
     @DisplayName("Retorne o código HTTP400 quando as informações não estão validadas")
     void scenario1() throws Exception {
-            var response = mvc.perform(post("/api/urlshortener"))
-                    .andReturn().getResponse();
-            assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-        }
+        var response = mvc.perform(post("/api/urlshortener/generate"))
+                .andReturn().getResponse();
+        assertThat(response.getStatus())
+                .as("Esperava-se que o código de status HTTP fosse 400 (Bad Request), mas foi recebido: " + response.getStatus())
+                .isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
 
     @Test
     @DisplayName("Retorne o código HTTP200 quando as informações não estão validadas")
     void scenario2() throws Exception {
         UrlShortenerRequestDTO testLink = new UrlShortenerRequestDTO();
-        testLink.setLongLink("https://cursos.alura.com.br/dashboard");
+        testLink.setLongLink("https://www.arduino.cc/");
 
         var urlShortenerResponse = new UrlShortenerResponseDTO();
-        urlShortenerResponse.setShortLink("/api/00ad38cf");
+        urlShortenerResponse.setShortLink("/api/e800b3c2");
 
         when(urlShortenerService.generateShortLink(any())).thenReturn(String.valueOf(urlShortenerResponse));
 
@@ -129,22 +131,9 @@ class UrlShortenerControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
-//    @Test
-//    @DisplayName("Listar URL")
-//    void scenario6(){
-//        PageRequest pageRequest = PageRequest.of(0,10);
-//        Page<UrlDetailDTO> emptyPage = Page.empty();
-//        when(urlShortenerService.listPage(pageRequest)).thenReturn((Page<UrlDetailDTO>) emptyPage);
-//
-//        ResponseEntity<Page<UrlDetailDTO>> response = urlShortenerController.listUrl(pageRequest);
-//
-//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-//        assertThat(response.getBody()).isEqualTo(emptyPage);
-//    }
-
     @Test
     @DisplayName("Excluir URL")
-    void scenario7(){
+    void scenario6(){
         Long id = 1L;
         ResponseEntity<String> response = urlShortenerController.deleteUrl(id);
 
@@ -153,7 +142,7 @@ class UrlShortenerControllerTest {
 
     @Test
     @DisplayName("Atualizar LongLink - Url Found")
-    void scenario8(){
+    void scenario7(){
         Long id = 1L;
         String newLongLink = "http://www.new-example.com";
         UpdateUrlDTO updateUrl = new UpdateUrlDTO();
@@ -171,7 +160,7 @@ class UrlShortenerControllerTest {
 
     @Test
     @DisplayName("Atualizar LongLink - Url Not Found")
-    void scenario9(){
+    void scenario8(){
         Long id = 1L;
         String newLongLink = "http://www.new-example.com";
         UpdateUrlDTO updateUrl = new UpdateUrlDTO();
