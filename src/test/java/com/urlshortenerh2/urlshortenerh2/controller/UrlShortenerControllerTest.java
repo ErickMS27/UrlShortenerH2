@@ -27,6 +27,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.OffsetDateTime;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -71,25 +73,26 @@ class UrlShortenerControllerTest {
     @Test
     @DisplayName("Retorne o código HTTP200 quando as informações não estão validadas")
     void scenario2() throws Exception {
-        UrlShortenerRequestDTO testLink = new UrlShortenerRequestDTO();
-        testLink.setLongLink("https://www.arduino.cc/");
-
-        var urlShortenerResponse = new UrlShortenerResponseDTO();
+        UrlShortenerResponseDTO urlShortenerResponse = new UrlShortenerResponseDTO();
+        urlShortenerResponse.setLongLink("https://www.arduino.cc/");
         urlShortenerResponse.setShortLink("/api/e800b3c2");
+        urlShortenerResponse.setEstimatedTime(OffsetDateTime.now().toLocalDateTime());
+        urlShortenerResponse.setVisitCount(0L);
 
         when(urlShortenerService.generateShortLink(any())).thenReturn(String.valueOf(urlShortenerResponse));
 
-        var response = mvc.perform(post("/api/urlshortener")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(urlShortenerRequestJacksonTester.write(testLink).getJson())
-                )
-                .andReturn().getResponse();
+        var response = mvc.perform(post("/api/urlshortener/generate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(urlShortenerRequestJacksonTester.write(new UrlShortenerRequestDTO()).getJson())
+        ).andReturn().getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 
         var calledJson = urlShortenerResponseJacksonTester.write(urlShortenerResponse).getJson();
+
         assertThat(response.getContentAsString()).isEqualTo(calledJson);
     }
+
 
     @Test
     @DisplayName("Retorne o código HTTP404 quando a URL encurtada não aparecer")
