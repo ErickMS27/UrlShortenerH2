@@ -37,3 +37,7 @@ i
 9src/main/java/com/urlshortenerh2/service/UserService.java,4\f\4fa00f5254f20ebc051aa72d4b71685924e065af
 t
 Dsrc/main/java/com/urlshortenerh2/exception/UrlNotFoundException.java,3\a\3a33325369be7bd062cc779958e745d6fc8caac5
+o
+?src/main/java/com/urlshortenerh2/exception/UrlErrorHandler.java,8\e\8e6dd80facaa7b43bcd070fa3d551f7c13a5e6c4
+q
+Asrc/main/java/com/urlshortenerh2/exception/ValidateErrorData.java,9\6\9610e9d42d1d021c27ea94cd38003fedeb83bfe2

@@ -10,10 +10,6 @@ import com.urlshortenerh2.service.UrlShortenerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
@@ -135,16 +131,11 @@ public class UrlShortenerController
         }
     }
 
-//    public ResponseEntity<Page<UrlDetailDTO>> listUrl(@PageableDefault(size = 10, sort = "id") Pageable pages) {
-//    Page<UrlDetailDTO> page = (Page<UrlDetailDTO>) urlShortenerService.listPage((PageRequest) pages);
-//        return ResponseEntity.ok(page);
-//    }
-
     @DeleteMapping("/deleteUrl/{id}")
     public ResponseEntity<String> deleteUrl(@PathVariable Long id) {
         urlShortenerService.deleteUrlForId(id);
         if (id != null) {
-            return ResponseEntity.ok("URL com ID " + id + " excluído com sucesso.");
+            return ResponseEntity.ok("URL com ID: " + id + " excluído com sucesso.");
         } else {
             return ResponseEntity.notFound().build();
         }
