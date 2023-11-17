@@ -35,3 +35,5 @@ f
 6src/main/java/com/urlshortenerh2/dto/UpdateUrlDTO.java,6\2\6298d67e1820fbd2390978c159cd06720136ad72
 i
 9src/main/java/com/urlshortenerh2/service/UserService.java,4\f\4fa00f5254f20ebc051aa72d4b71685924e065af
+t
+Dsrc/main/java/com/urlshortenerh2/exception/UrlNotFoundException.java,3\a\3a33325369be7bd062cc779958e745d6fc8caac5

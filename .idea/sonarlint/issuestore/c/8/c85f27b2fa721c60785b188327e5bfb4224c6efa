@@ -1,7 +1,12 @@
 
 _
-java:S6813 "BRemove this field injection and use constructor injection instead.(êæÄŞ8‹áÎ¿½1
-E
-java:S1905‹"'Remove this unnecessary cast to "Page".(ãïĞÙ8ØµÀ½1
-L
-java:S1905‹".Remove this unnecessary cast to "PageRequest".(ãïĞÙ8ØµÀ½1
+java:S6813 "BRemove this field injection and use constructor injection instead.(êæÄŞ8Û¬Õì½1
+^	java:S125Š"<This block of commented-out lines of code should be removed.(¤óèŸùÿÿÿÿ8ç¬Õì½1
+c
+java:S1128"ARemove this unused import 'org.springframework.data.domain.Page'.(˜âüÿÿÿÿ8ıÜˆí½1
+e
+java:S1128"HRemove this unused import 'org.springframework.data.domain.PageRequest'.(ºêâÚ8ıÜˆí½1
+g
+java:S1128"ERemove this unused import 'org.springframework.data.domain.Pageable'.(‡ë‚Öıÿÿÿÿ8ıÜˆí½1
+e
+java:S1128"IRemove this unused import 'org.springframework.data.web.PageableDefault'.(¯’Î<8ıÜˆí½1

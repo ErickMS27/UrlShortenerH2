@@ -25,5 +25,9 @@ public class UrlDetailDTO {
     }
 
     public UrlDetailDTO(Long id, String shortLink, String shortLink1, String longLink, Long visitCount) {
+        this.id = id;
+        this.shortLink = shortLink;
+        this.longLink = longLink;
+        this.visitCounts = visitCount;
     }
 }

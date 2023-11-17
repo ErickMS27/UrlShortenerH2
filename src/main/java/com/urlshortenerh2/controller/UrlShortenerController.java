@@ -135,15 +135,18 @@ public class UrlShortenerController
         }
     }
 
-    public ResponseEntity<Page<UrlDetailDTO>> listUrl(@PageableDefault(size = 10, sort = "id") Pageable pages) {
-    Page<UrlDetailDTO> page = (Page<UrlDetailDTO>) urlShortenerService.listPage((PageRequest) pages);
-        return ResponseEntity.ok(page);
-    }
+//    public ResponseEntity<Page<UrlDetailDTO>> listUrl(@PageableDefault(size = 10, sort = "id") Pageable pages) {
+//    Page<UrlDetailDTO> page = (Page<UrlDetailDTO>) urlShortenerService.listPage((PageRequest) pages);
+//        return ResponseEntity.ok(page);
+//    }
 
     @DeleteMapping("/deleteUrl/{id}")
-    public ResponseEntity<Void> deleteUrl(@PathVariable Long id) {
+    public ResponseEntity<String> deleteUrl(@PathVariable Long id) {
         urlShortenerService.deleteUrlForId(id);
-    return ResponseEntity.noContent().build();
+        if (id != null) {
+            return ResponseEntity.ok("URL com ID " + id + " excluído com sucesso.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
-
 }
